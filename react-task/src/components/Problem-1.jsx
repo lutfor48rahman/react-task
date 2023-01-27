@@ -2,23 +2,31 @@ import React, { useState } from "react";
 
 const Problem1 = () => {
   const [show, setShow] = useState([]);
+  const [filters, setFilters] = useState([]);
   const [name, setName] = useState('');
   const [status, setStatus] = useState("");
+  const [items, setItems] = useState([]);
 
-  console.log(show);
+  console.log(filters);
 
   const handleSubmit = (e) => {
       e.preventDefault();
       const data = { name, status }
       if (name && status) {
-          setShow((ls) => [...ls, data])
+          setShow((ls) => [...ls, data]);
+          setFilters((ls) => [...ls, data]);
           setName('')
           setStatus('')
       }
   };
 
   const handleClick = (val) => {
-    setShow(val);
+      setShow(val);
+          const updateItem = show.filter((item) => {
+            return item.status == val;
+          });
+          setShow(updateItem);
+      
   };
 
   return (
@@ -35,7 +43,7 @@ const Problem1 = () => {
                 type="text"
                 name="username"
                 value={name}
-                onChange={(e)=>setName(e.target.value)}
+                onChange={(e) => setName(e.target.value)}
                 className="form-control"
                 placeholder="Name"
               />
@@ -46,7 +54,7 @@ const Problem1 = () => {
                 className="form-control"
                 name="status"
                 value={status}
-                onChange={(e)=>setStatus(e.target.value)}
+                onChange={(e) => setStatus(e.target.value)}
                 placeholder="Status"
               />
             </div>
@@ -61,16 +69,17 @@ const Problem1 = () => {
           <ul className="nav nav-pills mb-3" id="pills-tab" role="tablist">
             <li className="nav-item">
               <button
-                className={`nav-link ${show === "all" && "active"}`}
+                className={`nav-link `}
                 type="button"
-                onClick={() => handleClick("all")}
+                onClick={() => setShow(filters)}
               >
                 All
               </button>
             </li>
             <li className="nav-item">
               <button
-                className={`nav-link ${show === "active" && "active"}`}
+                //   ${show === "active" && "active"}
+                className={`nav-link `}
                 type="button"
                 onClick={() => handleClick("active")}
               >
@@ -79,7 +88,7 @@ const Problem1 = () => {
             </li>
             <li className="nav-item">
               <button
-                className={`nav-link ${show === "completed" && "active"}`}
+                className={`nav-link `}
                 type="button"
                 onClick={() => handleClick("completed")}
               >
@@ -94,16 +103,14 @@ const Problem1 = () => {
                 <th scope="col">Name</th>
                 <th scope="col">Status</th>
               </tr>
-                          {
-                              show.map(s => {
-                                  return (
-                                    <tr>
-                                      <td>{s.name}</td>
-                                      <td>{s.status}</td>
-                                    </tr>
-                                  );
-                              })
-                          }
+              {show.map((s) => {
+                return (
+                  <tr>
+                    <td>{s.name}</td>
+                    <td>{s.status}</td>
+                  </tr>
+                );
+              })}
             </thead>
             <tbody></tbody>
           </table>
